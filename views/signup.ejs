@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <%- include('common/links') %>
+</head>
+<body>
+    <%- include('common/nav', { activePage: 'home' }) %>
+    <div class="container mt-5">
+        <h2>Sign Up</h2>
+   <form action="/user/signup" method="POST">
+       <input type="text" name="fullname" placeholder="Full Name" required>
+       <input type="email" name="email" placeholder="Email" required>
+       <input type="password" name="password" placeholder="Password" required>
+       <input type="text" name="profilepic" placeholder="Profile Picture URL">
+       <button type="submit">Sign Up</button>
+   </form>
+
+   </div>
+
+    <%- include('common/scripts') %>
+</body>
+</html>
