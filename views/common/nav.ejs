@@ -9,18 +9,32 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Publish a blog</a>
-        </li>
-        <li class="nav-item dropdown">
+        <% if (locals.user) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Publish a blog</a>
+          </li>
+          <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Tanay Bobbili
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="/user/signout">Logout</a></li>
           </ul>
         </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signin">Signin</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signup">Signup</a>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
-</nav>  
+</nav>
+<% if (locals.error) { %>
+    <div class="alert alert-danger" role="alert">
+        <%= locals.error %>
+    </div>
+<% } %>

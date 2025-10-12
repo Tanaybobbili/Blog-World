@@ -7,6 +7,21 @@ const userschema = new Schema({
     role : {type : String, enum : ['admin','user'], default : 'user'}
 },{timestamps : true});
 
+
+const {generatetokenforuser} = require('../utils/auth');
+
+
+userschema.static("matchpasswordtogeneratetoken", async function(email, password){     
+    const user = await this.findOne({email});
+    if(!user) throw new Error("No user found");
+
+    if(user.password !== password){
+        throw new Error("Password doesn't match");
+    }
+    const token = generatetokenforuser(user);
+    return token;
+});
+
 const User = model('user', userschema);
 
 module.exports = User;
