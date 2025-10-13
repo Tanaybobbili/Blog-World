@@ -6,12 +6,26 @@
     <title>Home</title>
     <%- include('common/links') %>
 </head>
-<body>
-
-    
+<body>    
     <%- include('common/nav', { activePage: 'home' }) %>
 
-
+    <div class="container mt-3">
+        <h1 class="mb-4">Latest Blogs</h1>
+        <% if (blogs.length === 0) { %>
+            <p>No blogs available.</p>
+        <% } else { %>
+            <% blogs.forEach(blog => { %>
+                    <div class="card" style="width: 18rem;">
+                        <img src="<%= blog.imageurl %>" class="card-img-top" alt="Blog Image">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= blog.title %></h5>
+                            <p class="card-text"><%= blog.content %></p>
+                            <a href="/blog/<%= blog._id %>" class="btn btn-primary">Take a look</a>
+                        </div>
+                    </div>
+            <% }); %>
+        <% } %>
+    </div>
 
     <%- include('common/scripts') %>
 </body>

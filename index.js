@@ -5,6 +5,8 @@
     const mongoose = require('mongoose');
     const cookieparser = require('cookie-parser');
     const checkauthcookie = require('./middlewares/auth');
+    const Blog = require('./models/blogs');
+    
     mongoose.connect('mongodb://localhost:27017/blogworld')
     .then(()=>{
         console.log("Mongodb connected");
@@ -18,12 +20,19 @@
     app.use(express.urlencoded({extended : true}));
     app.use(cookieparser());
     app.use(checkauthcookie('token'));
+    app.use(express.static(path.resolve('./public')));
+    
     app.use('/user', userrouter);
     app.set('view engine', 'ejs');
     app.set("views", path.resolve("./views"));
-    app.get('/',(req,res)=>{
-        res.render("home",{user : req.user});
+
+    app.get('/',async (req,res)=>{
+        const blogs = (await Blog.find({})).sort((a,b)=>{b.createdAt - a.createdAt});
+        res.render("home",{user : req.user, blogs});
     });
+
+    const blogrouter = require('./routes/blog');
+    app.use('/blog', blogrouter);
 
     app.listen(PORT,()=>{
         console.log(`Server is running on http://localhost:${PORT}`);
