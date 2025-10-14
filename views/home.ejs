@@ -17,7 +17,7 @@
                 <style>
                     .blog-card-img {
                         height: 160px;
-                        object-fit: auto;
+                        object-fit: cover;
                         width: 100%;
                     }
 
@@ -28,6 +28,7 @@
                     @media (min-width: 1200px) {
                         .blog-card-img { height: 150px; }
                     }
+                    
                 </style>
                 <% blogs.forEach(blog => { %>
                     <div class="col-12 col-md-6 col-lg-3 d-flex">

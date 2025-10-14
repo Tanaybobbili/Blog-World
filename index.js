@@ -18,6 +18,7 @@
 
     const userrouter = require('./routes/user');
     app.use(express.urlencoded({extended : true}));
+    app.use(express.json());
     app.use(cookieparser());
     app.use(checkauthcookie('token'));
     app.use(express.static(path.resolve('./public')));

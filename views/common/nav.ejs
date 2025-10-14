@@ -15,8 +15,7 @@
           </li>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            
-            <img src="<%= locals.user.profilepic %>" alt="Profile Picture" class="rounded-circle ms-2" style="width: 30px; height: 30px; object-fit: cover;">
+            <img src="<%= locals.user.profilepic %>" alt="Profile Picture" class="rounded-circle ms-2 profile" style="width: 30px; height: 30px; object-fit: cover;">
             <%= locals.user.username %>
           </a>
           <ul class="dropdown-menu">
@@ -40,3 +39,16 @@
         <%= locals.error %>
     </div>
 <% } %>
+<style>
+    .profile {
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        will-change: transform;
+        display: inline-block;
+    }
+
+    .profile:hover {
+        transform: scale(1.2);
+        z-index: 5;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    }
+</style>
