@@ -3,9 +3,9 @@ const blogschema = new Schema({
     title : {type : String, required : true},
     content : {type : String, required : true},
     imageurl : {type : String},
-    createdby : {type : Schema.Types.ObjectId, ref : 'user'}
+    createdby : {type : Schema.Types.ObjectId, ref : 'User'}
 },{timestamps : true});
 
-const blog = model('blog', blogschema);
+const Blog = model('Blog', blogschema);
 
-module.exports = blog;
+module.exports = Blog;

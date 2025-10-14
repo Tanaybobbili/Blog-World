@@ -22,8 +22,8 @@ router.post('/signin', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    const {fullname, email, password} = req.body;
-    await User.create({fullname, email, password});
+    const {username, email, password} = req.body;
+    await User.create({username, email, password});
     return res.redirect('/');
 });
 

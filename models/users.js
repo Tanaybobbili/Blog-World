@@ -1,9 +1,9 @@
 const {Schema, model} = require('mongoose');
 const userschema = new Schema({
-    fullname : {type : String, required : true},
+    username : {type : String, required : true},
     email : {type : String, required : true, unique : true},
     password : {type : String, required : true},
-    profilepic : {type : String, default : '.././public/default.png'},
+    profilepic : {type : String, default : '/images/default.jpg'},
     role : {type : String, enum : ['admin','user'], default : 'user'}
 },{timestamps : true});
 
@@ -22,6 +22,6 @@ userschema.static("matchpasswordtogeneratetoken", async function(email, password
     return token;
 });
 
-const User = model('user', userschema);
+const User = model('User', userschema);
 
 module.exports = User;

@@ -25,14 +25,14 @@
     app.use('/user', userrouter);
     app.set('view engine', 'ejs');
     app.set("views", path.resolve("./views"));
-
+    const blogrouter = require('./routes/blog');
+    app.use('/blog', blogrouter);
     app.get('/',async (req,res)=>{
-        const blogs = (await Blog.find({})).sort((a,b)=>{b.createdAt - a.createdAt});
+        const blogs = await Blog.find({}).sort({ createdAt: -1 });
         res.render("home",{user : req.user, blogs});
     });
 
-    const blogrouter = require('./routes/blog');
-    app.use('/blog', blogrouter);
+    
 
     app.listen(PORT,()=>{
         console.log(`Server is running on http://localhost:${PORT}`);
