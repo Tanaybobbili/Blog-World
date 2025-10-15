@@ -9,17 +9,81 @@
 <body>
     <%- include('common/nav', { activePage: 'home' }) %>
     <div class="container mt-5">
-        <h2>Sign Up</h2>
-   <form action="/user/signup" method="POST" enctype="multipart/form-data">
-       <input type="text" name="username" placeholder="Full Name" required>
-       <input type="email" name="email" placeholder="Email" required>
-       <input type="password" name="password" placeholder="Password" required>
-       <input type="file" class="profile" name="profilepic" placeholder="Profile Picture" accept="image/*">
-       <button type="submit">Sign Up</button>
-   </form>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Create an account</h3>
+                        <form action="/user/signup" method="POST" enctype="multipart/form-data" novalidate>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Full name</label>
+                                <input id="username" name="username" type="text" class="form-control" placeholder="Your full name" required>
+                                <div class="invalid-feedback">
+                                    Please provide your full name.
+                                </div>
+                            </div>
 
-   </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input id="email" name="email" type="email" class="form-control" placeholder="you@example.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input id="password" name="password" type="password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="profilepic" class="form-label">Profile picture <small class="text-muted">(optional)</small></label>
+                                <input id="profilepic" name="profilepic" type="file" class="form-control" accept="image/*">
+                                <div class="form-text">Recommended: square image, up to 2MB.</div>
+                                <div class="mt-2">
+                                    <img id="preview" src="" alt="Preview" class="rounded-circle" style="display:none;width:72px;height:72px;object-fit:cover;border:1px solid rgba(0,0,0,0.06);">
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/user/signin">Already have an account?</a>
+                                <button type="submit" class="btn btn-primary">Sign up</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <%- include('common/scripts') %>
+    <script>
+        const input = document.getElementById('profilepic');
+        const preview = document.getElementById('preview');
+        if (input) {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) { preview.style.display = 'none'; preview.src = ''; return; }
+                if (!file.type.startsWith('image/')) { preview.style.display = 'none'; return; }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    preview.src = reader.result;
+                    preview.style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('form')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 </body>
 </html>
