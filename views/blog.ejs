@@ -155,7 +155,7 @@
 
 
             <div class="author-row">
-                <img src="<%= blog.createdby.profilepic %>" alt="Profile Picture" class="rounded-circle profile medium" style="object-fit: cover;">
+                <a href="/user/profile/<%= blog.createdby.id %>"><img src="<%= blog.createdby.profilepic %>" alt="Profile Picture" class="rounded-circle profile medium" style="object-fit: cover;"></a>
                 <div>
                     <div class="author-name"><%= blog.createdby.username %></div>
                     <div class="text-muted small">Published on <%= new Date(blog.createdAt).toLocaleDateString() %></div>
@@ -184,7 +184,7 @@
                     <% comments.forEach(comment => { %>
                         <div class="comment-item">
                             <div class="d-flex align-items-start gap-3">
-                                <img src="<%= comment.createdby.profilepic %>" alt="Profile Picture" class="rounded-circle profile small" style="object-fit: cover;">
+                                <a href="/user/profile/<%= comment.createdby.id %>"><img src="<%= comment.createdby.profilepic %>" alt="Profile Picture" class="rounded-circle profile small" style="object-fit: cover;"></a>
                                 <div class="flex-grow-1">
                                     <div class="d-flex align-items-center">
                                         <h6 class="mb-0 me-2"><%= comment.createdby.username %></h6>

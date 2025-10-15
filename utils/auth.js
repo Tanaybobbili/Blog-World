@@ -6,6 +6,7 @@ function generatetokenforuser(user){
         id: user._id, 
         username: user.username,
         email: user.email, 
+        bio : user.bio,
         profilepic : user.profilepic, 
         role : user.role
     };

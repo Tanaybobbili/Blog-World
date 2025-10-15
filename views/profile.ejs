@@ -13,17 +13,49 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
-                        <h3 class="card-title   mb-3">Your Profile</h3>
-                        <img src="<%= user.profilepic %>" alt="Profile Picture" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
-                        <h4 class="mb-2"><%= user.username %></h4>
+                        <h3 class="card-title mb-3">Profile</h3>
+                        <img src="<%= profileUser.profilepic %>" alt="Profile Picture" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover; border:1px solid rgba(0,0,0,0.06);">
+                        <h4 class="mb-2"><%= profileUser.username %></h4>
 
-                        <% if (locals.user && locals.user.id === String(user._id)) { %>
-                            <form action="/user/profile/<%= user._id %>/avatar" method="POST" enctype="multipart/form-data" class="mt-3">
-                                <div class="mb-2">
-                                    <input type="file" name="profilepic" accept="image/*" class="form-control form-control-sm" required>
+                        <% if (profileUser.bio) { %>
+                            <p class="text-muted small mb-2"><%= profileUser.bio %></p>
+                        <% } else { %>
+                            <p class="text-muted small mb-2">No bio provided.</p>
+                        <% } %>
+
+                        <% if (locals.user && locals.user.id === String(profileUser._id)) { %>
+                            <!-- Combined form: update bio and/or profile picture -->
+                            <form action="/user/profile/<%= profileUser._id %>/update" method="POST" enctype="multipart/form-data" class="mt-3">
+                                <div class="row g-2 justify-content-center">
+                                    <div class="col-12">
+                                        <label class="form-label small mb-1">Update profile picture (optional)</label>
+                                        <input type="file" name="profilepic" id="profilepic-input" accept="image/*" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label small mb-1">Bio</label>
+                                        <textarea name="bio" class="form-control form-control-sm" rows="2" placeholder="Write a short bio (leave blank to keep current)"><%= profileUser.bio %></textarea>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                                    </div>
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm" type="submit">Change profile picture</button>
                             </form>
+
+                            <script>
+                                // Image preview: when user selects a new file, show it in the avatar img
+                                (function(){
+                                    const input = document.getElementById('profilepic-input');
+                                    const avatar = document.querySelector('img[alt="Profile Picture"]');
+                                    if (!input || !avatar) return;
+                                    input.addEventListener('change', (e) => {
+                                        const f = e.target.files && e.target.files[0];
+                                        if (!f || !f.type.startsWith('image/')) return;
+                                        const reader = new FileReader();
+                                        reader.onload = () => avatar.src = reader.result;
+                                        reader.readAsDataURL(f);
+                                    });
+                                })();
+                            </script>
                         <% } %>
                     </div>
                 </div>

@@ -29,6 +29,13 @@ const upload = multer({
     limits: { fileSize: 3 * 1024 * 1024 } 
 });
 
+// middleware to ensure the request is from the logged-in owner
+function ensureOwner(req, res, next) {
+    if (!req.user) return res.redirect('/user/signin');
+    if (String(req.user.id) !== String(req.params.id)) return res.status(403).send('Forbidden');
+    return next();
+}
+
 
 router.get('/signin', (req, res) => {
     res.render('signin');
@@ -50,11 +57,47 @@ router.post('/signin', async (req, res) => {
 });
 
 router.post('/signup', upload.single('profilepic'), async (req, res) => {
-    const {username, email, password,} = req.body;
-    const profile = req.file.filename;
+    try {
+        const {username, email, bio, password} = req.body;
+        let profilePath = '/images/default.jpg';
+        if (req.file && req.file.filename) {
+            profilePath = `/profiles/${req.file.filename}`;
+        }
 
-    await User.create({username, email, password, profilepic : `/profiles/${profile}`});
-    return res.redirect('/');
+        await User.create({username, email, bio: bio || '', password, profilepic: profilePath});
+        return res.redirect('/');
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send('Signup failed');
+    }
+});
+
+router.post('/profile/:id/update', ensureOwner, upload.single('profilepic'), async (req, res) => {
+    try {
+        const { bio } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).send('User not found');
+
+        if (typeof bio === 'string') {
+            const trimmed = bio.trim();
+            if (trimmed.length > 0) user.bio = trimmed.slice(0,300);
+        }
+
+        if (req.file && req.file.filename) {
+            user.profilepic = `/profiles/${req.file.filename}`;
+        }
+
+        await user.save();
+
+        const {generatetokenforuser} = require('../utils/auth');
+        const token = generatetokenforuser(user);
+        res.cookie('token', token);
+
+        return res.redirect(`/user/profile/${req.params.id}`);
+    } catch (err) {
+        console.error('Update error:', err);
+        return res.status(500).send('Server error');
+    }
 });
 
 router.get('/signout', (req, res) => {
@@ -68,50 +111,13 @@ router.get('/profile/:id', async (req, res) => {
         if (!user) {
             return res.status(404).render('404');
         }
-        res.render('profile', { user });
-    } catch (error) {
-        console.error(error);
-        res.status(500).render('500');
-    }
-});
-
-router.post('/profile/:id/avatar', function(req, res, next) {
-    if (!req.user) {
-        return res.redirect('/user/signin');
-    }
-    if (String(req.user.id) !== String(req.params.id)) {
-        return res.status(403).send('Forbidden');
-    }
-    upload.single('profilepic')(req, res, function (err) {
-        if (err) {
-            console.error('Upload error:', err);
-            return res.status(400).send(err.message || 'Upload failed');
+        return res.render('profile', { profileUser: user });
+        } catch (error) {
+            console.error(error);
+            res.status(500).render('500');
         }
-
-        (async () => {
-            try {
-                if (!req.file) return res.status(400).send('No file uploaded');
-
-                const filename = req.file.filename;
-                const profilePath = `/profiles/${filename}`;
-
-                const user = await User.findById(req.params.id);
-                if (!user) return res.status(404).send('User not found');
-
-                user.profilepic = profilePath;
-                await user.save();
-                
-                const {generatetokenforuser} = require('../utils/auth');
-                const token = generatetokenforuser(user);
-                res.cookie('token', token);
-
-                return res.redirect(`/user/profile/${req.params.id}`);
-            } catch (e) {
-                console.error(e);
-                return res.status(500).send('Server error');
-            }
-        })();
-    });
 });
+
+
 
 module.exports = router;

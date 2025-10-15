@@ -4,6 +4,7 @@ const userschema = new Schema({
     email : {type : String, required : true, unique : true},
     password : {type : String, required : true},
     profilepic : {type : String, default : '/images/default.jpg'},
+    bio: { type: String, default: '' },
     role : {type : String, enum : ['admin','user'], default : 'user'}
 },{timestamps : true});
 
