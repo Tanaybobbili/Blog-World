@@ -45,3 +45,43 @@ body { background: var(--muted-bg); }
 @media (min-width: 992px){ .blog-card-img{ height: 180px; } }
 @media (min-width: 1200px){ .blog-card-img{ height: 150px; } }
 @media (max-width: 575px){ .blog-card-img{ height: 140px; } }
+
+
+/* CSS for blog.ejs               */
+.blog-image-wrapper { width: 100%; border-radius: 8px; overflow: hidden; background: #e9ecef; display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box; border:1px solid rgba(0,0,0,0.06); box-shadow:0 6px 18px rgba(12,18,24,0.04); }
+.blog-image-wrapper img.blog-image { width:auto; max-width:100%; height:auto; max-height:520px; display:block; object-fit:contain; border-radius:6px; border:1px solid rgba(0,0,0,0.06); }
+.blog-content { background:#fdfdfd; border:1px solid rgba(0,0,0,0.05); border-radius:8px; padding:1rem; margin-top:1rem; margin-bottom:1rem; font-size:1.05rem; color:#2d2d2d; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+.blog-content:hover{ background:#fcfcfc; box-shadow:0 4px 10px rgba(0,0,0,0.08); transition:all .3s ease; }
+.author-row { display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem; }
+.profile.medium { width:44px; height:44px; object-fit:cover; border-radius:50%; }
+.profile.small { width:34px; height:34px; object-fit:cover; border-radius:50%; }
+.profile { transition: transform 0.18s ease, box-shadow 0.18s ease; will-change: transform; display: inline-block; }
+.profile:hover, .profile:focus { transform: scale(1.18); z-index: 5; box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+
+@media (max-width:575px){ .blog-image-wrapper img.blog-image{ max-height:260px; } .blog-content{ padding:1rem; font-size:.98rem; line-height:1.6; } }
+
+
+
+/* CSS for home.ejs               */
+.blog-card-img{ height:160px; object-fit:cover; width:100%; }
+@media (min-width:992px){ .blog-card-img{ height:180px; } }
+@media (min-width:1200px){ .blog-card-img{ height:150px; } }
+@media (max-width:575px){ .blog-card-img{ height:140px; } }
+
+
+.spacer-md { height:1.5rem; }
+
+/* CSS for profile & signup pages */
+.avatar-large{ width:120px; height:120px; object-fit:cover; border:1px solid rgba(0,0,0,0.06); border-radius:8px; }
+.preview-small{ display:none; width:72px; height:72px; object-fit:cover; border:1px solid rgba(0,0,0,0.06); border-radius:50%; }
+.bio-small{ font-size:.9rem; color:#6c757d; }
+
+
+
+.trunc-4-5rem { max-height: 4.5rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; line-clamp: 4; }
+
+
+
+.rounded-circle.avatar-lg { width: 120px; height: 120px; object-fit: cover; border:1px solid rgba(0,0,0,0.06); border-radius: 50%; display: inline-block; }
+.rounded-circle.preview-72 { width:72px; height:72px; object-fit:cover; border:1px solid rgba(0,0,0,0.06); border-radius:50%; display:none; }
+.show-inline { display: inline-block !important; }

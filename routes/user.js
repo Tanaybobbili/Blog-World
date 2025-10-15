@@ -29,7 +29,6 @@ const upload = multer({
     limits: { fileSize: 3 * 1024 * 1024 } 
 });
 
-// middleware to ensure the request is from the logged-in owner
 function ensureOwner(req, res, next) {
     if (!req.user) return res.redirect('/user/signin');
     if (String(req.user.id) !== String(req.params.id)) return res.status(403).send('Forbidden');

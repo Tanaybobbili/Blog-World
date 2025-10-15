@@ -43,7 +43,7 @@
                                 <input id="profilepic" name="profilepic" type="file" class="form-control" accept="image/*">
                                 <div class="form-text">Recommended: square image, up to 2MB.</div>
                                 <div class="mt-2">
-                                    <img id="preview" src="" alt="Preview" class="rounded-circle" style="display:none;width:72px;height:72px;object-fit:cover;border:1px solid rgba(0,0,0,0.06);">
+                                    <img id="preview" src="" alt="Preview" class="rounded-circle preview-72">
                                 </div>
                             </div>
 
@@ -65,12 +65,12 @@
         if (input) {
             input.addEventListener('change', (e) => {
                 const file = e.target.files && e.target.files[0];
-                if (!file) { preview.style.display = 'none'; preview.src = ''; return; }
-                if (!file.type.startsWith('image/')) { preview.style.display = 'none'; return; }
+                if (!file) { preview.classList.remove('show-inline'); preview.src = ''; return; }
+                if (!file.type.startsWith('image/')) { preview.classList.remove('show-inline'); return; }
                 const reader = new FileReader();
-                reader.onload = () => {
+                    reader.onload = () => {
                     preview.src = reader.result;
-                    preview.style.display = 'inline-block';
+                    preview.classList.add('show-inline');
                 };
                 reader.readAsDataURL(file);
             });

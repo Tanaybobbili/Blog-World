@@ -14,22 +14,6 @@
             <p>No blogs available.</p>
         <% } else { %>
             <div class="row g-4">
-                <style>
-                    .blog-card-img {
-                        height: 160px;
-                        object-fit: cover;
-                        width: 100%;
-                    }
-
-                    @media (min-width: 992px) {
-                        .blog-card-img { height: 180px; }
-                    }
-
-                    @media (min-width: 1200px) {
-                        .blog-card-img { height: 150px; }
-                    }
-                    
-                </style>
                 <% blogs.forEach(blog => { %>
                     <div class="col-12 col-md-6 col-lg-3 d-flex">
                         <div class="card w-100 h-100">
@@ -38,7 +22,7 @@
                             <% } %>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title"><%= blog.title %></h5>
-                                <p class="card-text text-truncate" style="max-height: 4.5rem;"><%= blog.content %></p>
+                                <p class="card-text text-truncate trunc-4-5rem"><%= blog.content %></p>
                                 <div class="mt-auto">
                                     <a href="/blog/<%= blog._id %>" class="btn btn-primary">Take a look</a>
                                 </div>
