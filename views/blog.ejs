@@ -12,10 +12,26 @@
             border: none;
         }
 
-        .blog-image {
+        .blog-image-wrapper {
             width: 100%;
-            object-fit: cover;
             border-radius: 8px;
+            overflow: hidden;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blog-image-wrapper img.blog-image {
+            width: auto;
+            max-width: 100%;
+            padding: 0.5rem;
+            height: auto;
+            max-height: 520px;
+            display: block;
+            object-fit: contain;
+            border-radius: 15px;
+            background: transparent;
         }
 
         .blog-content {
@@ -108,8 +124,8 @@
         }
 
         @media (max-width: 575px) {
-            .blog-image {
-                height: 200px;
+            .blog-image-wrapper img.blog-image {
+                max-height: 260px; /* mobile limit */
             }
 
             .blog-content {
@@ -125,8 +141,12 @@
 
     <div class="container mt-4">
         <div class="blog-card shadow-sm">
-            <h1 class="mb-3"><%= blog.title %></h1>
-            <img src="<%= blog.imageurl %>" class="blog-image" alt="Blog Image">
+            <h1 class="mb-2 ms-2 mt-2"><%= blog.title %></h1>
+            <% if (blog.imageurl) { %>
+                <div class="blog-image-wrapper mb-3">
+                    <img src="<%= blog.imageurl %>" class="blog-image" alt="Blog Image">
+                </div>
+            <% } %>
 
             <div class="blog-content">
                 <p><%- blog.content %></p>

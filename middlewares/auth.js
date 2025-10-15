@@ -8,7 +8,8 @@ function checkauthcookie(cookie) {
 
         try {
             const userpayload = verifytoken(tokencookievalue);
-            req.user = userpayload;
+                req.user = userpayload;
+                res.locals.user = userpayload;
         } catch(error){}
         return next();
     };
