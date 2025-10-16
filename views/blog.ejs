@@ -5,136 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
     <%- include('common/links') %>
-    <style>
-        .blog-card {
-            max-width: 960px;
-            margin: 0 auto;
-            border: none;
-        }
-
-        .blog-image-wrapper {
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .blog-image-wrapper img.blog-image {
-            width: auto;
-            max-width: 100%;
-            padding: 0.5rem;
-            height: auto;
-            max-height: 520px;
-            display: block;
-            object-fit: contain;
-            border-radius: 15px;
-            background: transparent;
-        }
-
-        .blog-content {
-            background: #fdfdfd;
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 8px;
-            padding: 0 1.8rem;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            font-size: 1.05rem;
-            line-height: 1;
-            color: #2d2d2d;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .blog-content:hover {
-            background: #fcfcfc;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-
-        .author-row {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-        }
-
-        .author-name {
-            font-weight: 600;
-        }
-
-        .comments-container {
-            max-width: 960px;
-            margin: 1.5rem auto 3rem;
-        }
-
-        .comment-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid rgba(0,0,0,0.05);
-            background: #ffffff;
-            margin-bottom: 0.75rem;
-        }
-
-        .comment-meta {
-            font-size: 0.9rem;
-        }
-
-        .comment-body {
-            background: #f8f9fa;
-            padding: 0.6rem 0.75rem;
-            border-radius: 6px;
-            max-height: 220px;
-            overflow: auto;
-        }
-
-        .comment-body p {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-size: 0.95rem;
-            line-height: 1.45;
-            color: #212529;
-        }
-
-        .profile {
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
-            will-change: transform;
-            display: inline-block;
-        }
-
-        .profile.small {
-            width: 34px;
-            height: 34px;
-        }
-
-        .profile.medium {
-            width: 44px;
-            height: 44px;
-        }
-
-        .profile:hover,
-        .profile:focus {
-            transform: scale(1.18);
-            z-index: 5;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-        }
-
-        @media (max-width: 575px) {
-            .blog-image-wrapper img.blog-image {
-                max-height: 260px; /* mobile limit */
-            }
-
-            .blog-content {
-                padding: 1rem;
-                font-size: 0.98rem;
-                line-height: 1.6;
-            }
-        }
-    </style>
+    
 </head>
 <body>
     <%- include('common/nav') %>
@@ -149,7 +20,13 @@
             <% } %>
 
             <div class="blog-content">
-                <p><%- blog.content %></p>
+                <div class="post-body">
+                    <% if (typeof safeHtml !== 'undefined') { %>
+                        <%- safeHtml %>
+                    <% } else { %>
+                        <pre><%= blog.content || '' %></pre>
+                    <% } %>
+                </div>
             </div>
 
 
@@ -204,5 +81,35 @@
     </div>
 
     <%- include('common/scripts') %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+        <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+        <script>
+            (function(){
+                const post = document.querySelector('.post-body');
+                if (!post) return;
+                const text = post.textContent || '';
+                const hasMdLink = /\[[^\]]+\]\([^\)]+\)/.test(text);
+                const hasInlineCode = /`[^`]+`/.test(text);
+                    if ((hasMdLink || hasInlineCode) && window.markdownit){
+                    try{
+                        const md = window.markdownit({html:true, linkify:true, typographer:true});
+                        post.innerHTML = md.render(text);
+                        if (window.hljs && hljs.highlightElement) {
+                            document.querySelectorAll('pre code').forEach((b) => hljs.highlightElement(b));
+                        }
+                    }catch(e){
+                        console.error('md fallback failed', e);
+                    }
+                }
+
+                    document.querySelectorAll('.post-body > pre').forEach(pre => {
+                        const txt = pre.textContent || '';
+                        const lines = txt.split(/\r?\n/).filter(l => l.trim() !== '');
+                        if (lines.length <= 2 && !/[;{}()<>]/.test(txt)) pre.classList.add('not-code');
+                    });
+            })();
+        </script>
 </body>
 </html>

@@ -18,7 +18,8 @@
             </div>
             <div class="mb-3">
                 <label for="content">Content</label>
-                <textarea class="form-control" id="content" name="content" required></textarea>
+                <textarea class="form-control" id="content" name="content" rows="12" required></textarea>
+                <div class="form-text mt-1">You can write your post in Markdown. Use backticks for code blocks, and links like <code>[label](https://example.com)</code>.</div>
             </div>
             <div class="mb-3">
                 <label for="image">Image</label>
@@ -26,11 +27,29 @@
             </div>
             <button class="btn btn-primary" type="submit">Create Blog Post</button>
         </form>
+        <div class="mt-4">
+            <h5>Preview</h5>
+            <div id="preview-area" class="card p-3 md-preview-area"></div>
+        </div>
     </div>
 
 
 
 
     <%- include('common/scripts') %>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script>
+        (function(){
+            const md = window.markdownit ? window.markdownit({html:true, linkify:true, typographer:true}) : null;
+            const ta = document.getElementById('content');
+            const preview = document.getElementById('preview-area');
+            if (!md || !ta || !preview) return;
+            function update(){
+                try{ preview.innerHTML = md.render(ta.value || ''); }catch(e){ preview.textContent = ta.value; }
+            }
+            ta.addEventListener('input', update);
+            update();
+        })();
+    </script>
 </body>
 </html>
