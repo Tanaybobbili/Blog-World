@@ -6,7 +6,9 @@
     const cookieparser = require('cookie-parser');
     const checkauthcookie = require('./middlewares/auth');
     const Blog = require('./models/blogs');
+    const searchRouter = require('./routes/search');
     
+
     mongoose.connect('mongodb://localhost:27017/blogworld')
     .then(()=>{
         console.log("Mongodb connected");
@@ -28,9 +30,11 @@
     app.set("views", path.resolve("./views"));
     const blogrouter = require('./routes/blog');
     app.use('/blog', blogrouter);
+    app.use('/search', searchRouter);
+
     app.get('/',async (req,res)=>{
         const blogs = await Blog.find({}).sort({ createdAt: -1 });
-        res.render("home",{user : req.user, blogs});
+        res.render("home",{user : req.user, blogs, q: ''});
     });
 
     

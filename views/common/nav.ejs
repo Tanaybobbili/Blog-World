@@ -17,15 +17,21 @@
           </li>
         <% } %>
       </ul>
-      <form class="d-flex mx-auto search-bar" role="search">
+      <form class="d-flex mx-auto search-bar position-relative" role="search" id="searchForm" action="/search" method="GET">
         <input
           class="form-control me-2 search-input"
           type="search"
+          name="q"
+          id="searchInput"
           placeholder="Search blogs..."
           aria-label="Search"
+          autocomplete="off"
         >
         <button class="btn btn-outline-light search-btn" type="submit">Search</button>
+
+        <div id="suggestionsBox" class="list-group position-absolute w-100" style="top: 100%; z-index: 1050;"></div>
       </form>
+
 
       <ul class="navbar-nav ms-auto align-items-center">
         <% if (locals.user) { %>

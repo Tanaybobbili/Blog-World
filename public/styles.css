@@ -69,6 +69,11 @@
 .navbar-dark .navbar-toggler-icon {
   filter: brightness(1.2) invert(1);
 }
+.navbar-toggler {
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  background-color:#2a3b55;
+}
 
 .navbar-collapse.site-nav {
   background: linear-gradient(180deg, var(--nav-start), var(--nav-end));
@@ -552,4 +557,14 @@ input[type="file"]::file-selector-button  {
     width: 100%;
     margin-top: 8px;
   }
+}
+.search-bar .list-group-item {
+  background-color: #8390a5;
+  border:none;
+  border-radius: 0;
+}
+
+
+.search-bar .list-group-item:hover {
+  background-color: #a9c0d7;
 }

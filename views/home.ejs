@@ -9,7 +9,10 @@
 <body>    
     <%- include('common/nav', { activePage: 'home' }) %>
     <div class="container mt-3">
-        <h1 class="mb-4">Latest Blogs</h1>
+        <h2>
+            <%= q && q.trim() !== '' ? 'Search Results' : 'Latest Blogs' %>
+        </h2>
+
         <% if (blogs.length === 0) { %>
             <p>No blogs available.</p>
         <% } else { %>
