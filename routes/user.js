@@ -4,6 +4,7 @@ const User = require('../models/users');
 const {matchpasswordtogeneratetoken} = require('../models/users');
 const multer = require('multer');
 const path = require('path');
+const { generatetokenforuser } = require('../utils/auth');
 
 
 
@@ -63,8 +64,16 @@ router.post('/signup', upload.single('profilepic'), async (req, res) => {
             profilePath = `/profiles/${req.file.filename}`;
         }
 
-        await User.create({username, email, bio: bio || '', password, profilepic: profilePath});
-        return res.redirect('/');
+        const newUser = await User.create({
+        username,
+        email,
+        bio: bio || '',
+        password,
+        profilepic: profilePath
+        });
+        const token = generatetokenforuser(newUser);
+        return res.cookie('token', token).redirect('/');
+
     } catch (err) {
         console.error(err);
         return res.status(500).send('Signup failed');

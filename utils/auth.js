@@ -8,7 +8,6 @@ function generatetokenforuser(user){
         email: user.email, 
         bio : user.bio,
         profilepic : user.profilepic, 
-        role : user.role
     };
     const token = jwt.sign(payload, secretkey, {expiresIn: '24h'});
     return token;

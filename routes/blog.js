@@ -107,11 +107,33 @@ router.get('/:id', async (req, res) => {
   return res.render('blog', { blog, user: req.user, comments, safeHtml });
 });
 router.post('/', upload.single('image'), async (req, res) => {
-  const { title, content } = req.body;
-  const safeContent = ensureClosedFences(content);
-  const blog = await Blog.create({ title, content: safeContent, imageurl: `/uploads/${req.file.filename}`, createdby: req.user.id });
-  res.redirect(`/blog/${blog._id}`);
+  try {
+    const { title, content } = req.body;
+    if (!title || !content) {
+      return res.status(400).send('Title and content are required.');
+    }
+
+    const safeContent = ensureClosedFences(content);
+
+    let imageUrl = null;
+    if (req.file) {
+      imageUrl = `/uploads/${req.file.filename}`;
+    }
+
+    const blog = await Blog.create({
+      title,
+      content: safeContent,
+      imageurl: imageUrl,   
+      createdby: req.user.id
+    });
+
+    res.redirect(`/blog/${blog._id}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error creating blog');
+  }
 });
+
 
 router.post('/comment/:blogid', async (req,res) => {
     await Comment.create({

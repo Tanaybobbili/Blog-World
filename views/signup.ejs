@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+    <title>Blog World - Sign Up</title>
     <%- include('common/links') %>
 </head>
 <body>
@@ -43,7 +43,7 @@
                                 <input id="profilepic" name="profilepic" type="file" class="form-control" accept="image/*">
                                 <div class="form-text">Recommended: square image, up to 2MB.</div>
                                 <div class="mt-2">
-                                    <img id="preview" src="" alt="Preview" class="rounded-circle preview-72">
+                                    <img id="preview" src="" alt="Preview" class="rounded-circle preview-72" style="display:none">
                                 </div>
                             </div>
 
@@ -62,19 +62,20 @@
     <script>
         const input = document.getElementById('profilepic');
         const preview = document.getElementById('preview');
-        if (input) {
-            input.addEventListener('change', (e) => {
-                const file = e.target.files && e.target.files[0];
-                if (!file) { preview.classList.remove('show-inline'); preview.src = ''; return; }
-                if (!file.type.startsWith('image/')) { preview.classList.remove('show-inline'); return; }
-                const reader = new FileReader();
-                    reader.onload = () => {
-                    preview.src = reader.result;
-                    preview.classList.add('show-inline');
-                };
-                reader.readAsDataURL(file);
-            });
+        input.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) {
+            preview.style.display = 'none'; // hide if not valid
+            preview.src = '';
+            return;
         }
+        const reader = new FileReader();
+        reader.onload = () => {
+            preview.src = reader.result;
+            preview.style.display = 'inline-block'; // show only when image is selected
+        };
+        reader.readAsDataURL(file);
+        });
 
         (function () {
             'use strict'
