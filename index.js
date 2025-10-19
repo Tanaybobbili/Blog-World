@@ -1,15 +1,16 @@
     const express = require('express');
     const app = express();
     const path = require('path');
-    const PORT = 8000;
     const mongoose = require('mongoose');
     const cookieparser = require('cookie-parser');
     const checkauthcookie = require('./middlewares/auth');
     const Blog = require('./models/blogs');
     const searchRouter = require('./routes/search');
+    require('dotenv').config();
     
+    const PORT = process.env.PORT || 8000;
 
-    mongoose.connect('mongodb://localhost:27017/blogworld')
+    mongoose.connect(process.env.MONGODB_URI)
     .then(()=>{
         console.log("Mongodb connected");
     })
