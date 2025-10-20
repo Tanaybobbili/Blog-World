@@ -48,12 +48,17 @@ router.post('/signup', upload.single('profilepic'), async (req, res) => {
         let profilePath = '/images/default.jpg';
 
         if (req.file) {
-            const result = await cloudinary.uploader.upload_stream({
-                folder: 'Blog-World/Profiles'
-            }, (error, result) => {
-                if (error) throw error;
-                return result;
-            }).end(req.file.buffer);
+            // Upload to Cloudinary using a Promise
+            const result = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: 'Blog-World/Profiles' },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+                stream.end(req.file.buffer);
+            });
             profilePath = result.secure_url;
         }
 
@@ -72,6 +77,7 @@ router.post('/signup', upload.single('profilepic'), async (req, res) => {
         return res.status(500).send('Signup failed');
     }
 });
+
 
 // Update Profile POST
 router.post('/profile/:id/update', ensureOwner, upload.single('profilepic'), async (req, res) => {
