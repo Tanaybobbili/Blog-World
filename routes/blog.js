@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
-
+const { upload } = require('../Cloudinary');
 const Blog = require('../models/blogs');
 const Comment = require('../models/comments');
 const MarkdownIt = require('markdown-it');
@@ -9,14 +9,6 @@ const sanitizeHtml = require('sanitize-html');
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
-
-
-const storage = multer.diskStorage({
-  destination(req, file, cb){ cb(null, path.resolve('./public/uploads/')) },
-  filename(req, file, cb){ cb(null, `${Date.now()}-${file.originalname}`) }
-})
-
-const upload = multer({ storage })
 
 function ensureClosedFences(text){
   if (!text) return '';
@@ -117,7 +109,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     let imageUrl = null;
     if (req.file) {
-      imageUrl = `/uploads/${req.file.filename}`;
+      imageUrl = req.file.path; // Cloudinary returns the full URL in path
     }
 
     const blog = await Blog.create({
